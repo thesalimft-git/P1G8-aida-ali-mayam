@@ -1,13 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-from csv_manager import write_data
-from services import normalize_time, normalize_price
-
 
 course_title = [] 
 course_teacher = [] 
-course_time = []
-course_price = []
 
 for i in range(1, 3):
     url = f'https://toplearn.com/courses?pageId={i}'
@@ -25,19 +20,13 @@ for i in range(1, 3):
 
 
     for span_time in soup.find_all('span', class_="time"):
-        course_time.append(normalize_time(span_time.text))
-
- 
-    for span_price in soup.find_all('span', class_="price"):
-        i_tag = span_price.find('i')
-        pr = i_tag.text
-        course_price.append(normalize_price(pr))
+        print(span_time.text)
 
 
-write_data(
-    course_title, 
-    course_teacher, 
-    course_price, 
-    course_time
-)
-    
+
+
+    print(course_title)
+    print(course_teacher)
+
+
+

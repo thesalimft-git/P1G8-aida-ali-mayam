@@ -6,9 +6,12 @@ def normalize_time(t:str) -> int:
 
 
 
-# IRHT
+
 def normalize_price(pr:str) -> int:
-    
-    # ???
-    
-    return pr
+    try: 
+        pr = pr.strip()
+        pr = pr.replace(',', '')
+        return int(pr)
+    except:
+        print('can not read price')
+        return 0
