@@ -56,6 +56,7 @@ def bank_account_simulator():
     
     accounts = {}
     while True:
+        print(accounts)
         print("\nMenu:")
         print("1. Create Account")
         print("2. Deposit Money")
