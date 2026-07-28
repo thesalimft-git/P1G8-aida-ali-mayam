@@ -1,3 +1,7 @@
+# 1023- ali akbari ( $100 )
+
+
+    
 # data_bank = {
 #     '1023': {
 #         'fullname': 'ali akbari',
@@ -16,17 +20,23 @@
 # }
 
 
-
 import json
 
-class DataManager:
+class DataManager():
     def __init__(self, file_name:str) -> None:
         self.file_name = file_name
-        
-    def get_data(self):
-        with open(self.file_name, 'r') as f:
-            return json.load(f)
-        
-    def set_data(self, data):
+
+    def get_date(self) -> dict:
+        try:
+            with open(self.file_name, 'r') as f:
+                return json.load(f)
+        except:
+            return dict()
+    
+    def set_data(self, data) -> None:
         with open(self.file_name, 'w') as f:
-            json.dump(data, f)
+            json.dump(data,f)
+            
+            
+
+
