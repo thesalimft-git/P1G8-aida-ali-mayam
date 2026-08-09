@@ -85,6 +85,15 @@ class BankSystem:
             print('type is not valid: {type}')
             
         self.bank_data[id]['balance'] = balance
+        
+        now = datetime.now()
+        date = now.strftime('%Y-%m-%d')
+        self.bank_data[id]['history'].append(
+            {
+                'type': type, 
+                'amount': amount, 
+                'date': date
+            })
          
     
     
