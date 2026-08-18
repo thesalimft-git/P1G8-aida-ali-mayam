@@ -10,7 +10,7 @@ class UI:
         self.bank_data = self.dm.get_data()
         
         self.root = tk.Tk()
-        self.root.title = 'Bank System App'  
+        self.root.title('Bank System App') 
         self.root.geometry("1000x600")   
         
     def save_data(self):
@@ -32,7 +32,9 @@ class UI:
             balance = self.bank_data[id]['balance']
             self.account_listbox.insert(id, f'{id}: {fullname} ${balance}')
                         
-        self.account_listbox.grid(row=2, column=0)
+        self.account_listbox.grid(row=1, column=0, rowspan=10, padx=20)
+        if self.account_listbox.size() > 0:
+            self.account_listbox.selection_set(0)
         
     def get_selected_id(self):
         selected = self.account_listbox.curselection()
@@ -46,7 +48,7 @@ class UI:
     
     def create_account_wizard(self):
         create_account_area_label = tk.Label(self.root, text="Create new Account")   
-        create_account_area_label.grid(row=0, column=1)
+        create_account_area_label.grid(row=0, column=1, columnspan=2, pady=10)
         
         fullname_label = tk.Label(self.root, text="Full Name: ")   
         fullname_label.grid(row=1, column=1)
@@ -58,8 +60,8 @@ class UI:
         fullname_entry = tk.Entry(self.root)
         amount_entry = tk.Entry(self.root)
 
-        fullname_entry.grid(row=1, column=1)
-        amount_entry.grid(row=2, column=1)
+        fullname_entry.grid(row=1, column=2)
+        amount_entry.grid(row=2, column=2)
         
         create_account_button = tk.Button(
             self.root, 
@@ -70,7 +72,7 @@ class UI:
                 amount_entry.get()
             )
         )
-        create_account_button.grid(row=3, column=1)
+        create_account_button.grid(row=3, column=1, columnspan=2)
 
     def create_account_handler(self, fullname, amount):
         now = datetime.now()
@@ -95,29 +97,32 @@ class UI:
         print('account created successfully')
      
     def show_account_detail(self):
+        show_account_area_label = tk.Label(self.root, text="Account Details:")   
+        show_account_area_label.grid(row=0, column=3, columnspan=2, padx=20)
+        
         account_name_label = tk.Label(self.root, text="Name")   
-        account_name_label.grid(row=0, column=2)
+        account_name_label.grid(row=1, column=3)
         
         try:
             fullname = self.bank_data.get(self.get_selected_id()).get('fullname')
             account_name_value_label = tk.Label(self.root, text=fullname)   
-            account_name_value_label.grid(row=0, column=3)
+            account_name_value_label.grid(row=1, column=4)
         except:
             pass
     
     
         account_balance_label = tk.Label(self.root, text="balance")   
-        account_balance_label.grid(row=1, column=2)
+        account_balance_label.grid(row=2, column=3, padx=30, pady=1)
         
         try:
             balance = self.bank_data.get(self.get_selected_id()).get('balance')
             account_balance_value_label = tk.Label(self.root, text=balance)   
-            account_balance_value_label.grid(row=1, column=3)
+            account_balance_value_label.grid(row=2, column=4)
         except:
             pass
                 
         account_history_label = tk.Label(self.root, text="history")   
-        account_history_label.grid(row=2, column=2)
+        account_history_label.grid(row=0, column=6)
         
         
         try:
@@ -130,10 +135,51 @@ class UI:
                 date = history.get('date')
                 self.history_listbox.insert(index, f'${amount} is {type} at {date}')
                                 
-            self.history_listbox.grid(row=2, column=3)
+            self.history_listbox.grid(row=1, column=6, rowspan=10)
         except:
             pass
         
+        deposit_button = tk.Button(
+            self.root, 
+            text="Deposit", 
+            width=15, 
+            command=lambda: self.second_level("Deposit")
+        )
+        
+        deposit_button.grid(row=4, column=3)
+        
+        withdraw_button = tk.Button(
+            self.root, 
+            text="Withdraw", 
+            width=15, 
+            command=lambda: self.second_level("Withdraw")
+        )
+        
+        withdraw_button.grid(row=4, column=4, padx=10)
+        
+    # TODO: add top level
+    def second_level(self, mode):
+        top = Toplevel(self.root)
+        top.title(mode)
+        top.geometry("250x120")
+
+        amount_label = tk.Label(top, text="Amount:")
+        amount_label.grid(row=0, column=0, padx=10, pady=10)
+
+        amount_entry = tk.Entry(top)
+        amount_entry.grid(row=0, column=1, padx=10, pady=10)
+
+        confirm_button = tk.Button(
+            top,
+            text="Confirm",
+            command=lambda: self.transaction_handler(mode, amount_entry.get(), top)
+        )
+        confirm_button.grid(row=1, column=0, columnspan=2, pady=10)
+        
+    def transaction_handler(self, mode, amount, top):
+        print(f"{mode}: {amount}")
+        top.destroy()    
+          
         
     def load_wizard(self):
         self.load_accounts_list()
